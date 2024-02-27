@@ -1,5 +1,6 @@
+
 import sys
-from PyQt6.QtWidgets import QApplication, QFormLayout, QLineEdit, QLabel, QWidget, QPushButton, QCheckBox, QRadioButton, QComboBox
+from PyQt6.QtWidgets import QApplication, QFormLayout, QLineEdit, QLabel, QWidget, QPushButton, QCheckBox, QRadioButton, QComboBox, QMessageBox
 from PyQt6.QtGui import QPixmap
 
 class FraternityApp(QWidget):
@@ -9,32 +10,31 @@ class FraternityApp(QWidget):
         self.setWindowTitle("ATENAS FRATERNITY")
         self.setGeometry(100, 100, 800, 600)
 
+        self.label = QLabel(self)
+        self.label.setPixmap(QPixmap("cover.png"))
+        self.label.adjustSize()
+        self.label.move(0, 160)
+     
         self.layout = QFormLayout()
         self.add_form_fields()
-        self.ComboBox()
-        self.CheckBox()
-        self.RadioButton()
         self.add_buttons()
         self.setLayout(self.layout)
-        
+
     def add_form_fields(self):
-        fields = {
+        self.fields = {
             "Name: ": QLineEdit(),
             "Phone Number: ": QLineEdit(),
             "Email-ID: ": QLineEdit(),
-            "Institution Name: ": QLineEdit(),
-            "Education qualification": QComboBox()
+            "Address: ": QLineEdit()
         }
-    def ComboBox(self):
+        for field, input_field in self.fields.items():
+            self.layout.addRow(field, input_field)
+
+        self.layout.addRow("Education Institution: ", QLineEdit())
         self.cb_platform = QComboBox()
         self.cb_platform.addItems(["Secondary / High School Education", "Bachelor's Degrees", "Master's Degrees"])
         self.layout.addRow("Education qualification", self.cb_platform)
 
-        for field, input_field in fields.items():
-            if field != "Education qualification":
-                self.layout.addRow(field, input_field)
-                
-    def CheckBox(self):
         checkbox_texts = [
             'Aviation Cabin-Crew & Ground-Staff',
             'Data Science & Analytics with Artificial Intelligence (AI), Machine Learning (ML)',
@@ -43,12 +43,10 @@ class FraternityApp(QWidget):
         ]
         for text in checkbox_texts:
             self.layout.addWidget(QCheckBox(text, self))
-            
-    def RadioButton(self):
+
         radiobutton_texts = ['Yes', 'No']
         for text in radiobutton_texts:
             self.layout.addWidget(QRadioButton(text, self))
-        
 
     def add_buttons(self):
         submit_button = QPushButton('Submit')
@@ -65,13 +63,39 @@ class FraternityApp(QWidget):
         self.layout.addWidget(exit_button)
 
     def submit_action(self):
-        print("Submit button clicked")
+        QMessageBox.information(
+            self,
+            'ATENAS FRATERNITY',
+            'Thank you, Data Stored Successfully!'
+        )
 
     def reset_action(self):
-        print("Reset button clicked")
+        answer = QMessageBox.question(
+            self,
+            'Confirmation',
+            'Do you want to Reset? ',
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        if answer == QMessageBox.StandardButton.Yes:
+            QMessageBox.information(
+                self,
+                'Information',
+                "You selected 'Yes', Form will be reset! ",
+                QMessageBox.StandardButton.Ok
+            )
+            # Clear form fields
+            for field in self.fields.values():
+                field.clear()
+        else:
+            QMessageBox.information(
+                self,
+                'Information',
+                "You selected 'No'.",
+                QMessageBox.StandardButton.Ok
+            )
 
-app = QApplication([])
-window = FraternityApp()
-window.show()
-sys.exit(app.exec())
-
+if __name__ == "__main__":
+    app = QApplication([])
+    window = FraternityApp()
+    window.show()
+    sys.exit(app.exec())
