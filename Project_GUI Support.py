@@ -1,7 +1,7 @@
-
 import sys
-from PyQt6.QtWidgets import QApplication, QFormLayout, QLineEdit, QLabel, QWidget, QPushButton, QCheckBox, QRadioButton, QComboBox, QMessageBox
-from PyQt6.QtGui import QPixmap
+from PyQt5.QtWidgets import QApplication, QFormLayout, QLineEdit, QLabel, QWidget, QPushButton, QCheckBox, QRadioButton, QComboBox, QMessageBox 
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QPixmap
 
 class FraternityApp(QWidget):
 
@@ -31,6 +31,8 @@ class FraternityApp(QWidget):
             self.layout.addRow(field, input_field)
 
         self.layout.addRow("Education Institution: ", QLineEdit())
+       
+        
         self.cb_platform = QComboBox()
         self.cb_platform.addItems(["Secondary / High School Education", "Bachelor's Degrees", "Master's Degrees"])
         self.layout.addRow("Education qualification", self.cb_platform)
@@ -50,12 +52,15 @@ class FraternityApp(QWidget):
 
     def add_buttons(self):
         submit_button = QPushButton('Submit')
+        submit_button.setFixedSize(QSize(150, 35))
         submit_button.clicked.connect(self.submit_action)
 
         reset_button = QPushButton('Reset')
+        reset_button.setFixedSize(QSize(150, 35))
         reset_button.clicked.connect(self.reset_action)
 
         exit_button = QPushButton('Exit')
+        exit_button.setFixedSize(QSize(150, 35))
         exit_button.clicked.connect(self.close)
 
         self.layout.addWidget(submit_button)
